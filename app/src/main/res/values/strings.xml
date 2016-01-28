@@ -25,5 +25,6 @@
 
     <!-- labels -->
     <string name="label_movie_release_date">Release date:</string>
+    <string name="cover_default_size" />
 
 </resources>

@@ -1,18 +1,22 @@
 package com.udacitygraduationproject.android.popularmovies.app;
-
+import android.net.Uri;
 import android.os.Bundle;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by ِAlaa on 28/01/2016.
  */
 public class Movie {
-    public static final String EXTRA_MOVIE ="com.udacitygraduationproject.android.popularmovies.app";
+
     public static final String KEY_ID = "id";
     public static final String KEY_TITLE = "title";
     public static final String KEY_OVERVIEW = "overview";
     public static final String KEY_POSTER_PATH = "poster_path";
     public static final String KEY_VOTE_AVERAGE = "vote_average";
     public static final String KEY_VOTE_COUNT = "vote_count";
+    public static final String EXTRA_MOVIE = "vote_count" ;
 
     public final long id;
     public final String title;
@@ -58,6 +62,27 @@ public class Movie {
         bundle.putLong(KEY_VOTE_COUNT, vote_count);
 
         return bundle;
+    }
+    public static Movie fromJson(JSONObject jsonObject) throws JSONException {
+        return new Movie(
+                jsonObject.getLong(KEY_ID),
+                jsonObject.getString(KEY_TITLE),
+                jsonObject.getString(KEY_OVERVIEW),
+                jsonObject.getString(KEY_POSTER_PATH),
+                jsonObject.getDouble(KEY_VOTE_AVERAGE),
+                jsonObject.getLong(KEY_VOTE_COUNT)
+        );
+    }
+
+    public Uri buildCoverUri(String size) {
+        final String BASE_URL = "http://image.tmdb.org/t/p/";
+
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(size)
+                .appendEncodedPath(poster_path)
+                .build();
+
+        return builtUri;
     }
 
 

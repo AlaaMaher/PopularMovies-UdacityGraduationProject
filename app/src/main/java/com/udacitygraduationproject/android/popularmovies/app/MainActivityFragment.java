@@ -1,11 +1,12 @@
 package com.udacitygraduationproject.android.popularmovies.app;
 
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.GridView;
 /**
  * A placeholder fragment containing a simple view.
@@ -20,17 +21,32 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-                        GridView gridview = (GridView) view.findViewById(R.id.grid_view);
+        GridView gridview = (GridView) view.findViewById(R.id.grid_view);
 
-                        if (gridview == null) {
-                        Log.d("MYLOG", "gridview is null");
-                    } else {
-                        Log.d("MYLOG", "gridview is NOT null");
+        if (gridview == null) {
+            return view;
+        }
+            gridview.setAdapter(new ImageAdapter(getActivity()));
+
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent,
+                                        View v,
+                                        int position,
+                                        long id) {
+
+                    ImageAdapter adapter = (ImageAdapter) parent.getAdapter();
+                    Movie movie = adapter.getItem(position);
+
+                    if (movie == null) {
+                        return;
                     }
 
-                        gridview.setAdapter(new ImageAdapter(getActivity()));
-
-                        return view;
-    }
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra(Movie.EXTRA_MOVIE, movie.toBundle());
+                    getActivity().startActivity(intent);
+                }
+            });
+            return view;
+        }
     }
 
